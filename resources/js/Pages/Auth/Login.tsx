@@ -32,17 +32,29 @@ export default function Login({ canResetPassword, status }: Props) {
   return (
     <section className='auth'>
         <div className="box">
-            <form action="">
+            <form onSubmit={onSubmit}>
                 <h2>Login</h2>
 
                 <div className='inputBx'>
-                    <span></span>
-                    <input type="text" placeholder='Username'/>
+                    <span className={form.errors.email ? 'error': ''}></span>
+                    <input type="text"
+                        value={form.data.email}
+                        onChange={e => form.setData('email', e.currentTarget.value)}
+                        required
+                        placeholder='Username'
+                        autoFocus
+                    />
                 </div>
 
                 <div className='inputBx'>
-                    <span></span>
-                    <input type="password" placeholder='Password'/>
+                    <span className={form.errors.password ? 'error': ''}></span>
+                    <input
+                        type="password"
+                        placeholder='Password'
+                        onChange={e => form.setData('password', e.currentTarget.value)}
+                        required
+                        autoComplete='current-password'
+                    />
                 </div>
 
                 <div className='inputBx'>

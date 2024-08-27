@@ -13,6 +13,11 @@
     font-family: 'Poppins', sans-serif;
 }
 
+body
+{
+    background: #222;
+}
+
 .auth
 {
     display: flex;
@@ -99,6 +104,14 @@
     width: 240px;
 }
 
+.inputBx label
+{
+    position: absolute;
+    top: -30px;
+    color: #fff;
+    opacity: 0.5;
+}
+
 .inputBx span
 {
     position: absolute;
@@ -129,28 +142,45 @@
     background: #292929;
 }
 
+.inputBx span.error::before
+{
+    background: repeating-conic-gradient(from var(--a), #a3071c 0%,#a3071c 10%, transparent 10%, transparent 50%);
+}
 
-.inputBx input
+.inputBx input,
+.inputBx textarea,
+.inputBx select
 {
     position: relative;
-    z-index: 10001;
+    z-index: 10;
     outline: none;
     border: none;
     padding: 8px 14px;
     background: transparent;
     color: #fff;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     letter-spacing: 0.1em;
     width: 100%;
 }
+.inputBx input:focus,
+.inputBx textarea:focus
+{
+    border-width: 0px;
+    outline:0; /* I have also tried outline:none */
+    -webkit-appearance:none;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
 
-.inputBx input::placeholder
+.inputBx input::placeholder,
+.inputBx textarea::placeholder
 {
     color: #fff;
     opacity: 0.5;
 }
 
-.auth input[type="submit"]
+input[type="submit"]
 {
     background: #01dbc2;
     cursor: pointer;
@@ -185,4 +215,20 @@
 {
     color: #01dbc2;
     filter: drop-shadow(0 0 15px #01dbc0);
+}
+
+
+.encuesta-item
+{
+    margin-bottom: 20px;
+}
+
+.encuesta-item footer
+{
+    background: crimson;
+}
+
+.encuesta-item footer.active
+{
+    background: cadetblue;
 }

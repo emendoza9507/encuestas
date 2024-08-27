@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreencuestasRequest;
+use App\Http\Requests\StoreEncuestaRequest;
 use App\Http\Requests\UpdateencuestasRequest;
-use App\Models\encuestas;
+use App\Models\Encuesta;
+use Inertia\Inertia;
 
-class EncuestasController extends Controller
+class EncuestaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,21 +22,25 @@ class EncuestasController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Encuesta/NuevaEncuesta', array(
+
+        ));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreencuestasRequest $request)
+    public function store(StoreEncuestaRequest $request)
     {
-        //
+        $encuesta = Encuesta::create([...$request->validated(), 'created_by' => $request->user()->id]);
+
+        return redirect()->route('encuesta.show', $encuesta->id)->with('message', 'Encuesta creada...');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(encuestas $encuestas)
+    public function show(Encuesta $encuestas)
     {
         //
     }
@@ -43,7 +48,7 @@ class EncuestasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(encuestas $encuestas)
+    public function edit(Encuesta $encuestas)
     {
         //
     }
@@ -51,7 +56,7 @@ class EncuestasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateencuestasRequest $request, encuestas $encuestas)
+    public function update(UpdateencuestasRequest $request, Encuesta $encuestas)
     {
         //
     }
@@ -59,7 +64,7 @@ class EncuestasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(encuestas $encuestas)
+    public function destroy(Encuesta $encuestas)
     {
         //
     }

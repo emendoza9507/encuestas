@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('preguntas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('encuesta_id')->references('id')->on('encuestas');
-            $table->foreignId('tipo_pregunta_id')->references('id')->on('tipo_poreguntas');
+            $table->foreignId('tipo_pregunta_id')->references('id')->on('tipo_preguntas');
             $table->string('text');
         });
     }
