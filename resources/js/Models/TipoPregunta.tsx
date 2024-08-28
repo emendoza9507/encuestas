@@ -1,4 +1,4 @@
 export default interface TipoPregunta {
-    id: number,
+    id: string,
     tipo: string
 }

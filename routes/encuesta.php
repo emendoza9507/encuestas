@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EncuestaController;
 use App\Http\Controllers\PreguntaController;
+use App\Http\Controllers\RespuestaController;
 use App\Http\Controllers\TipoPreguntaController;
 use App\Http\Controllers\TipoPreguntasController;
 use Illuminate\Foundation\Application;
@@ -17,5 +18,5 @@ Route::middleware([
     Route::resource('encuesta', EncuestaController::class);
     Route::resource('tipo_pregunta', TipoPreguntaController::class);
     Route::resource('pregunta', PreguntaController::class);
-
+    Route::resource('respuesta', RespuestaController::class);
 });

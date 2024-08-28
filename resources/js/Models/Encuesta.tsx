@@ -1,3 +1,5 @@
+import Pregunta from "./Pregunta"
+
 export default interface Encuesta
 {
     id: string
@@ -6,5 +8,6 @@ export default interface Encuesta
     start_date: string,
     exp_date: string,
     active: string,
-    created_by: number
+    created_by: number,
+    preguntas?: Pregunta[]
 }

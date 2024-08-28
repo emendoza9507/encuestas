@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorerespuestasRequest;
-use App\Http\Requests\UpdaterespuestasRequest;
-use App\Models\respuestas;
+use App\Http\Requests\StoreRespuestaRequest;
+use App\Http\Requests\UpdateRespuestaRequest;
+use App\Models\Respuesta;
+use Inertia\Inertia;
 
-class RespuestasController extends Controller
+class RespuestaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,15 +28,16 @@ class RespuestasController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorerespuestasRequest $request)
+    public function store(StoreRespuestaRequest $request)
     {
-        //
+        $repuesta = Respuesta::create($request->validated());
+        return redirect()->back()->with('respuesta',$repuesta);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(respuestas $respuestas)
+    public function show(Respuesta $respuestum)
     {
         //
     }
@@ -43,7 +45,7 @@ class RespuestasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(respuestas $respuestas)
+    public function edit(Respuesta $respuestum)
     {
         //
     }
@@ -51,7 +53,7 @@ class RespuestasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdaterespuestasRequest $request, respuestas $respuestas)
+    public function update(UpdateRespuestaRequest $request, Respuesta $respuestum)
     {
         //
     }
@@ -59,7 +61,7 @@ class RespuestasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(respuestas $respuestas)
+    public function destroy(Respuesta $respuestum)
     {
         //
     }

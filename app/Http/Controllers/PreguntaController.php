@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePreguntaRequest;
 use App\Http\Requests\UpdatePreguntaRequest;
 use App\Models\Pregunta;
+use Inertia\Inertia;
 
 class PreguntaController extends Controller
 {
@@ -29,15 +30,20 @@ class PreguntaController extends Controller
      */
     public function store(StorePreguntaRequest $request)
     {
-        //
+        $pregunta  = Pregunta::create($request->validated());
+        return redirect()->to(route('encuesta.show', ['encuestum' => $pregunta->encuesta_id]))->with('pregunta', $pregunta);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Pregunta $Pregunta)
+    public function show(Pregunta $preguntum)
     {
         //
+        $preguntum->load(['encuesta', 'respuestas']);
+        return Inertia::render('Pregunta/ShowPregunta', array(
+            'pregunta' => $preguntum
+        ));
     }
 
     /**

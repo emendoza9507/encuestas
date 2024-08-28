@@ -44,6 +44,7 @@ class EncuestaController extends Controller
     public function show(Encuesta $encuestum)
     {
         $tipos_pregunta = TipoPregunta::all();
+        $encuestum->load('preguntas');
 
         return Inertia::render('Encuesta/Detail', array(
             'encuesta' => $encuestum,

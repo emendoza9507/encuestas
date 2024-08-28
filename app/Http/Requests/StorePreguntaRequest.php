@@ -11,7 +11,7 @@ class StorePreguntaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StorePreguntaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'encuesta_id' => ['required', 'exists:encuestas,id'],
+            'tipo_pregunta_id' => ['required', 'exists:tipo_preguntas,id'],
+            'text' => ['required']
         ];
     }
 }

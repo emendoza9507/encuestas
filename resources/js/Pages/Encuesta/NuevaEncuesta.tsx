@@ -16,7 +16,7 @@ export default function NuevaEncuesta() {
     function onSubmit(e: React.FormEvent) {
         e.preventDefault()
         form.post(route('encuesta.store'), {
-            onFinish: () => form.reset()
+            onFinish: () => {}
         })
     }
 

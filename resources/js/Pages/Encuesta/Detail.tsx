@@ -5,26 +5,34 @@ import TipoPregunta from '@/Models/TipoPregunta';
 import { useForm } from '@inertiajs/react';
 import React, { useState } from 'react';
 import route from 'ziggy-js';
+import List from '../Pregunta/ListPreguntas';
+import ListPreguntas from '../Pregunta/ListPreguntas';
+import { User } from '@/types';
 
 interface Props {
     encuesta: Encuesta,
-    tipos_pregunta: TipoPregunta[]
+    tipos_pregunta: TipoPregunta[],
+    auth: {
+        user: User
+    }
 }
 
-export default function Detail({ encuesta, tipos_pregunta }: Props) {
+export default function Detail({ encuesta, tipos_pregunta, auth }: Props) {
     const [openNewQuestionModal, setOpenNewQuestionModal] = useState(false)
     const { post, setData, errors } = useForm({
-        pregunta: '',
-        tipo_pregunta: '',
+        text: '',
+        tipo_pregunta_id: tipos_pregunta[0].id,
         encuesta_id: encuesta.id
     })
 
     function onSubmit(e: React.FormEvent) {
-        console.log('entro')
+        e.preventDefault()
         post(route('pregunta.store'), {
             onSuccess: () => setOpenNewQuestionModal(true)
         })
     }
+
+    const canAddQuestion = auth.user.id == encuesta.created_by;
 
     return (
         <AppLayout title='Encuesta'>
@@ -34,21 +42,23 @@ export default function Detail({ encuesta, tipos_pregunta }: Props) {
                         {encuesta.title}
                     </h1>
 
-                    <p className='text-white opacity-45'>{encuesta.description}</p>
+                    <p className='text-white opacity-45 mb-4'>{encuesta.description}</p>
 
-                    <button type='button' onClick={() => setOpenNewQuestionModal(true)}>Agregar pregunta</button>
+                    {canAddQuestion && <button type='button' className='bg-blue-600 p-2 text-gray-300 mb-4 hover:bg-blue-400' onClick={() => setOpenNewQuestionModal(true)}>Agregar pregunta</button>}
 
-                    <form onSubmit={onSubmit}>
-                        <DialogModal isOpen={openNewQuestionModal} onClose={() => setOpenNewQuestionModal(false)}>
+                    <ListPreguntas encuesta={encuesta}/>
+
+                    <DialogModal isOpen={openNewQuestionModal} onClose={() => setOpenNewQuestionModal(false)}>
+                        <form onSubmit={onSubmit}>
                             <DialogModal.Content title='Agregar pregunta'>
                                 <div className='inputBx !w-full'>
                                     <span></span>
-                                    <textarea onChange={(e) => setData('pregunta', e.currentTarget.value)} placeholder='Pregunta para la encuesta' />
+                                    <textarea onChange={(e) => setData('text', e.currentTarget.value)} placeholder='Pregunta para la encuesta' />
                                 </div>
                                 <div className='inputBx !w-full !mb-5'>
                                     <span></span>
                                     <label className='!text-black !opacity-100' htmlFor="">Tipo de Pregunta</label>
-                                    <select onChange={(e) => setData('tipo_pregunta', e.currentTarget.value)}>
+                                    <select defaultValue={tipos_pregunta[0].id} onChange={(e) => setData('tipo_pregunta_id', e.currentTarget.value)}>
                                         {tipos_pregunta?.map(({ id, tipo }) => (
                                             <option key={id} value={id} className='text-black'>{tipo}</option>
                                         ))}
@@ -62,8 +72,8 @@ export default function Detail({ encuesta, tipos_pregunta }: Props) {
                                     </button>
                                 </div>
                             </DialogModal.Footer>
-                        </DialogModal>
-                    </form>
+                        </form>
+                    </DialogModal>
                 </div>
             </div>
         </AppLayout>

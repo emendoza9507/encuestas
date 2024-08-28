@@ -10,4 +10,9 @@ class Encuesta extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function preguntas()
+    {
+        return $this->hasMany(Pregunta::class);
+    }
 }
