@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Storetipo_preguntasRequest;
-use App\Http\Requests\Updatetipo_preguntasRequest;
-use App\Models\tipo_preguntas;
+use App\Http\Requests\StorePreguntaRequest;
+use App\Http\Requests\UpdatePreguntaRequest;
+use App\Models\Pregunta;
 
-class TipoPreguntasController extends Controller
+class PreguntaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class TipoPreguntasController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Storetipo_preguntasRequest $request)
+    public function store(StorePreguntaRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class TipoPreguntasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(tipo_preguntas $tipo_preguntas)
+    public function show(Pregunta $Pregunta)
     {
         //
     }
@@ -43,7 +43,7 @@ class TipoPreguntasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(tipo_preguntas $tipo_preguntas)
+    public function edit(Pregunta $Pregunta)
     {
         //
     }
@@ -51,7 +51,7 @@ class TipoPreguntasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Updatetipo_preguntasRequest $request, tipo_preguntas $tipo_preguntas)
+    public function update(UpdatePreguntaRequest $request, Pregunta $Pregunta)
     {
         //
     }
@@ -59,7 +59,7 @@ class TipoPreguntasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(tipo_preguntas $tipo_preguntas)
+    public function destroy(Pregunta $Pregunta)
     {
         //
     }

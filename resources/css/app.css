@@ -149,7 +149,8 @@ body
 
 .inputBx input,
 .inputBx textarea,
-.inputBx select
+.inputBx select,
+.inputBx button
 {
     position: relative;
     z-index: 10;
@@ -180,6 +181,7 @@ body
     opacity: 0.5;
 }
 
+.inputBx button[type="submit"],
 input[type="submit"]
 {
     background: #01dbc2;

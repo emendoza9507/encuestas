@@ -1,9 +1,11 @@
 import React from 'react';
+import { Link, useForm, Head } from '@inertiajs/react';
 import Welcome from '@/Components/Welcome';
 import AppLayout from '@/Layouts/AppLayout';
 import Question from '@/Components/icons/Question';
 import Users from '@/Components/icons/Users';
 import Ligth from '@/Components/icons/Light';
+import useRoute from '@/Hooks/useRoute';
 
 interface Encuesta {
     title: string;
@@ -25,6 +27,9 @@ export default function Dashboard() {
         { active: false, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
         { active: true, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' }
     ]
+    const form = useForm()
+    const route = useRoute();
+
 
 
     return (
@@ -38,9 +43,9 @@ export default function Dashboard() {
                             <span></span>
                             <input type="search" placeholder='Buscar' />
                         </div>
-                        <div className="inputBx ">
+                        <form action={route('encuesta.create')} className="inputBx ">
                             <input type="submit" value="Nueva Encuesta" />
-                        </div>
+                        </form>
                     </div>
 
                     <section className="">

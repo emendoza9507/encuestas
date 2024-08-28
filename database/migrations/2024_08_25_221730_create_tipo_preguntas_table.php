@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tipo_preguntas', function (Blueprint $table) {
             $table->id();
             $table->string('tipo', 10)->unique();
+            $table->timestamps();
         });
     }
 

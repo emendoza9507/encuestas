@@ -17,7 +17,7 @@ class TipoPreguntaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'tipo' => fake()->word()
         ];
     }
 }

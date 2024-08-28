@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEncuestaRequest;
 use App\Http\Requests\UpdateencuestasRequest;
 use App\Models\Encuesta;
+use App\Models\TipoPregunta;
 use Inertia\Inertia;
 
 class EncuestaController extends Controller
@@ -40,9 +41,14 @@ class EncuestaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Encuesta $encuestas)
+    public function show(Encuesta $encuestum)
     {
-        //
+        $tipos_pregunta = TipoPregunta::all();
+
+        return Inertia::render('Encuesta/Detail', array(
+            'encuesta' => $encuestum,
+            'tipos_pregunta' => $tipos_pregunta
+        ));
     }
 
     /**
