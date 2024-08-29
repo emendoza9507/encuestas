@@ -64,5 +64,7 @@ class RespuestaController extends Controller
     public function destroy(Respuesta $respuestum)
     {
         //
+        $respuestum->delete();
+        return redirect()->back();
     }
 }

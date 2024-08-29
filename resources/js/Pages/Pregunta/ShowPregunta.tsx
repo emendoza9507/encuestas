@@ -2,8 +2,10 @@ import AppLayout from '@/Layouts/AppLayout';
 import Pregunta from '@/Models/Pregunta';
 import { User } from '@/types';
 import React, { useState } from 'react';
-import AgregarRespuesta from './AgragarRespuesta';
+import AgregarRespuesta from '../Respuesta/AgragarRespuesta';
 import ListRespuestasPorPregunta from '../Respuesta/ListRespuestasPorPregunta';
+import Respuesta from '@/Models/Respuesta';
+import EliminarRespuesta from '../Respuesta/EliminarRespuesta';
 
 interface Props {
     pregunta: Pregunta
@@ -12,10 +14,9 @@ interface Props {
     }
 }
 
-export default function ShowPregunta({pregunta, auth}: Props) {
-    console.log(pregunta);
-
+export default function ShowPregunta({pregunta, auth, ...rest}: Props) {
     const canAgregarRespuesta = pregunta.encuesta?.created_by == auth.user.id
+    const [respuestaMaracada, setRespuestaMarcada] = useState<Respuesta>()
 
     return (
         <AppLayout title='Pregunta'>
@@ -29,11 +30,13 @@ export default function ShowPregunta({pregunta, auth}: Props) {
                     </p>
 
                     { canAgregarRespuesta && (
-                        <AgregarRespuesta pregunta={pregunta}/>
+                        <div className='flex gap-2'>
+                            <AgregarRespuesta pregunta={pregunta}/>
+                            {respuestaMaracada && <EliminarRespuesta respuesta={respuestaMaracada} onDeleted={() => setRespuestaMarcada(undefined)}/>}
+                        </div>
                     ) }
 
-                    <ListRespuestasPorPregunta pregunta={pregunta}/>
-                    {/* <p className='text-white opacity-45 mb-4'>{pregunta.description}</p> */}
+                    <ListRespuestasPorPregunta pregunta={pregunta} onSelectRespuesta={(respuesta) => setTimeout(() => {setRespuestaMarcada(respuesta)}, 10) }/>
                 </div>
             </div>
         </AppLayout>
