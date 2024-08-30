@@ -1,5 +1,6 @@
 import Encuesta from "./Encuesta"
 import Respuesta from "./Respuesta"
+import TipoPregunta from "./TipoPregunta"
 
 export default interface Pregunta
 {
@@ -8,5 +9,6 @@ export default interface Pregunta
     tipo_pregunta_id: string,
     text: string
     encuesta?: Encuesta
-    respuestas: Respuesta[]
+    respuestas?: Respuesta[],
+    tipoPregunta?: TipoPregunta
 }

@@ -6,6 +6,7 @@ import AgregarRespuesta from '../Respuesta/AgragarRespuesta';
 import ListRespuestasPorPregunta from '../Respuesta/ListRespuestasPorPregunta';
 import Respuesta from '@/Models/Respuesta';
 import EliminarRespuesta from '../Respuesta/EliminarRespuesta';
+import CrearRespuestDeUsuario from './CrearRespuestaDeUsuario';
 
 interface Props {
     pregunta: Pregunta
@@ -14,8 +15,9 @@ interface Props {
     }
 }
 
-export default function ShowPregunta({pregunta, auth, ...rest}: Props) {
+export default function ShowPregunta({ pregunta, auth, ...rest }: Props) {
     const canAgregarRespuesta = pregunta.encuesta?.created_by == auth.user.id
+    const canResponderPregunta = true
     const [respuestaMaracada, setRespuestaMarcada] = useState<Respuesta>()
 
     return (
@@ -29,14 +31,26 @@ export default function ShowPregunta({pregunta, auth, ...rest}: Props) {
                         {pregunta.text}
                     </p>
 
-                    { canAgregarRespuesta && (
-                        <div className='flex gap-2'>
-                            <AgregarRespuesta pregunta={pregunta}/>
-                            {respuestaMaracada && <EliminarRespuesta respuesta={respuestaMaracada} onDeleted={() => setRespuestaMarcada(undefined)}/>}
-                        </div>
-                    ) }
 
-                    <ListRespuestasPorPregunta pregunta={pregunta} onSelectRespuesta={(respuesta) => setTimeout(() => {setRespuestaMarcada(respuesta)}, 10) }/>
+                    <div className='flex gap-2 flex-wrap'>
+                        {canAgregarRespuesta && (
+                            <>
+                                <AgregarRespuesta pregunta={pregunta} />
+                                {respuestaMaracada && (
+                                    <>
+                                        <EliminarRespuesta respuesta={respuestaMaracada} onDeleted={() => setRespuestaMarcada(undefined)} />
+                                    </>
+                                )}
+                            </>
+                        )}
+
+                        {(respuestaMaracada && canResponderPregunta) && (
+                            <CrearRespuestDeUsuario auth={auth} pregunta={pregunta} respuesta={respuestaMaracada} />
+                        )}
+
+                    </div>
+
+                    <ListRespuestasPorPregunta pregunta={pregunta} onSelectRespuesta={(respuesta) => setTimeout(() => { setRespuestaMarcada(respuesta) }, 10)} />
                 </div>
             </div>
         </AppLayout>

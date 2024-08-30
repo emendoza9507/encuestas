@@ -408,7 +408,7 @@ export default function AppLayout({
         ) : null}
 
         {/* <!-- Page Content --> */}
-        <main>{children}</main>
+        <main className='px-6'>{children}</main>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import Check from "@/Components/icons/Check"
 import Pregunta from "@/Models/Pregunta"
 import Respuesta from "@/Models/Respuesta"
 import React, { PropsWithChildren, useState } from "react"
@@ -17,7 +18,11 @@ interface ItemProps {
 function RespuestaItem({respuesta, index, active, onClick}: PropsWithChildren<ItemProps>) {
     return (
         <article onClick={onClick} className="flex gap-2 group">
-            <span className={`${!active ? 'text-gray-300' : 'text-red-300'} group-hover:text-red-300`}>{index}.</span>
+
+            <span className={`${!active ? 'text-gray-300' : 'text-red-300'} group-hover:text-red-300 relative`}>
+                {active && <span className="absolute right-4"><Check/></span>}
+                {index}.
+            </span>
             <p className="text-gray-300 group-hover:text-red-300">{respuesta.text}</p>
         </article>
     )
@@ -43,7 +48,7 @@ export default function ListRespuestasPorPregunta({
                 <span>{pregunta.respuestas?.length}</span>
             </div>
             <hr className='mb-4' />
-            {pregunta.respuestas.map((respuesta, index) => (
+            {pregunta.respuestas?.map((respuesta, index) => (
                 <RespuestaItem active={respuestaMarcada?.id === respuesta.id} key={respuesta.id} onClick={() => handleMarcarRespuesta(respuesta)} respuesta={respuesta} index={index + 1}/>
             ))}
         </section>
