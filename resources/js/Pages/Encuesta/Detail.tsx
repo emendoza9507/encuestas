@@ -8,16 +8,21 @@ import route from 'ziggy-js';
 import List from '../Pregunta/ListPreguntas';
 import ListPreguntas from '../Pregunta/ListPreguntas';
 import { User } from '@/types';
+import DocumentList from '@/Components/icons/DocumentList';
+import Users from '@/Components/icons/Users';
+import Question from '@/Components/icons/Question';
+import Pregunta from '@/Models/Pregunta';
 
 interface Props {
     encuesta: Encuesta,
+    preguntas: Pregunta[],
     tipos_pregunta: TipoPregunta[],
     auth: {
         user: User
     }
 }
 
-export default function Detail({ encuesta, tipos_pregunta, auth }: Props) {
+export default function Detail({ encuesta, tipos_pregunta, preguntas, auth }: Props) {
     const [openNewQuestionModal, setOpenNewQuestionModal] = useState(false)
     const { post, setData, errors } = useForm({
         text: '',
@@ -28,9 +33,11 @@ export default function Detail({ encuesta, tipos_pregunta, auth }: Props) {
     function onSubmit(e: React.FormEvent) {
         e.preventDefault()
         post(route('pregunta.store'), {
-            onSuccess: () => setOpenNewQuestionModal(true)
+            onSuccess: () => setOpenNewQuestionModal(false)
         })
     }
+
+    console.log(encuesta)
 
     const canAddQuestion = auth.user.id == encuesta.created_by;
 
@@ -38,15 +45,21 @@ export default function Detail({ encuesta, tipos_pregunta, auth }: Props) {
         <AppLayout title='Encuesta'>
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <h1 className='text-white text-2xl uppercase'>
+                    <h1 className='flex gap-2 items-center text-white text-2xl uppercase'>
+                        <DocumentList/>
                         {encuesta.title}
                     </h1>
-
                     <p className='text-white opacity-45 mb-4'>{encuesta.description}</p>
+
+
+                    <ul className='mb-2 text-green-200 flex gap-2'>
+                        <li className='flex gap-1 items-center'><Users title='Participantes'/> {encuesta.participantes?.length}</li>
+                        <li className='flex gap-1 items-center'><Question title='Preguntas'/> {encuesta.preguntas?.length}</li>
+                    </ul>
 
                     {canAddQuestion && <button type='button' className='bg-blue-600 p-2 text-gray-300 mb-4 hover:bg-blue-400' onClick={() => setOpenNewQuestionModal(true)}>Agregar pregunta</button>}
 
-                    <ListPreguntas encuesta={encuesta}/>
+                    <ListPreguntas encuesta={encuesta} preguntas={preguntas}/>
 
                     <DialogModal isOpen={openNewQuestionModal} onClose={() => setOpenNewQuestionModal(false)}>
                         <form onSubmit={onSubmit}>

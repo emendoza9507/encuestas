@@ -9,7 +9,10 @@ import React, { useEffect, useState } from 'react';
 import route from 'ziggy-js';
 
 interface Props {
-    encuesta: Encuesta
+    encuesta: Encuesta,
+    preguntas: {
+        data: Pregunta[]
+    }
 }
 
 interface PreguntaItemProps {
@@ -26,41 +29,37 @@ function PreguntaItem({ pregunta, index }: PreguntaItemProps) {
         .then(res => {
             setRespuestas(res.data.pregunta.respuestas)
         })
-        axios.get(route('api.pregunta.show', {preguntum: pregunta.id}))
-        axios.get(route('api.pregunta.show', {preguntum: pregunta.id}))
-        axios.get(route('api.pregunta.show', {preguntum: pregunta.id}))
-        axios.get(route('api.pregunta.show', {preguntum: pregunta.id}))
-        axios.get(route('api.pregunta.show', {preguntum: pregunta.id}))
-        axios.get(route('api.pregunta.show', {preguntum: pregunta.id}))
     }, [])
 
 
     return (
         <article className='mb-4 bg-gray-600 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
-            <div className='p-3'>{pregunta.text}</div>
+            <div className='p-3' onClick={() => router.visit(route('pregunta.show', { preguntum: pregunta.id }))}>{pregunta.text}</div>
             <footer className={`flex gap-3 p-3 bg-gray-700`}>
                 <Link href={route('pregunta.show', { preguntum: pregunta.id })}>
                     <FolderOpen/>
                 </Link>
-                <Link href='#'>
+                <span >
                     <Question/> : {respuestas.length}
-                </Link>
+                </span>
             </footer>
         </article>
     )
 }
 
-export default function ListPreguntas({ encuesta }: Props) {
+export default function ListPreguntas({ encuesta, preguntas }: Props) {
+
+    console.log(preguntas)
+
     return (
         <section>
             <div className='flex justify-between font-bold text-gray-300'>
                 <h4 className='font-bold text-gray-300'>Preguntas de la encuesta:</h4>
-                <span>{encuesta.preguntas?.length}</span>
             </div>
             <hr className='mb-4' />
 
 
-            {encuesta.preguntas?.map((pregunta, index) => (
+            {preguntas.data.map((pregunta, index) => (
                 <PreguntaItem index={index + 1} key={pregunta.id} pregunta={pregunta} />
             ))}
         </section>

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateEncuestaRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateEncuestaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::user()->getAuthIdentifier() == $this->encuestum->created_by;
     }
 
     /**
@@ -22,7 +23,11 @@ class UpdateEncuestaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['string'],
+            'description' => ['string'],
+            'start_date' => ['date'],
+            'exp_date' => ['date'],
+            'active' => ['boolean']
         ];
     }
 }

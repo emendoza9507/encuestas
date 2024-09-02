@@ -29,8 +29,8 @@ export default function ShowPregunta({ pregunta, auth, respuesta_user }: Props) 
     const canAgregarRespuesta = pregunta.encuesta?.created_by == auth.user.id
     const canResponderPregunta = true
     const [respuestaMaracada, setRespuestaMarcada] = useState<Respuesta>()
-    const respuestaUser = pregunta.respuestas && pregunta.respuestas.find((respuesta) => respuesta.id == respuesta_user.respuesta_id)
-    const respuestaUserIndex = pregunta.respuestas && pregunta.respuestas.findIndex((respuesta) => respuesta.id == respuesta_user.respuesta_id) + 1
+    const respuestaUser = pregunta.respuestas && respuesta_user && pregunta.respuestas.find((respuesta) => respuesta.id == respuesta_user.respuesta_id)
+    const respuestaUserIndex = pregunta.respuestas && respuesta_user && pregunta.respuestas.findIndex((respuesta) => respuesta.id == respuesta_user.respuesta_id) + 1
 
     return (
         <RespuestaUserContext.Provider value={{respuestaMarcada: respuestaMaracada, setRespuestaMarcada: setRespuestaMarcada}}>

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEncuestaRequest;
 use App\Http\Requests\UpdateEncuestaRequest;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Models\Encuesta;
+use App\Models\Pregunta;
 use App\Models\TipoPregunta;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -51,11 +53,16 @@ class EncuestaController extends Controller
     public function show(Encuesta $encuestum)
     {
         $tipos_pregunta = TipoPregunta::all();
-        $encuestum->load('preguntas');
+        $encuestum->load(['participantes' => function(Builder $query) {
+            $query->distinct();
+        }]);
+
+        $preguntas = Pregunta::where('encuesta_id', $encuestum->id)->paginate(5);
 
         return Inertia::render('Encuesta/Detail', array(
             'encuesta' => $encuestum,
-            'tipos_pregunta' => $tipos_pregunta
+            'tipos_pregunta' => $tipos_pregunta,
+            'preguntas' => $preguntas
         ));
     }
 
@@ -80,7 +87,9 @@ class EncuestaController extends Controller
      */
     public function update(UpdateEncuestaRequest $request, Encuesta $encuestum)
     {
-        //
+        $encuestum->update($request->validated());
+
+        return redirect()->to(route('encuesta.index'));
     }
 
     /**

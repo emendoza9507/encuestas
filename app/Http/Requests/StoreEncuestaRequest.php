@@ -25,7 +25,8 @@ class StoreEncuestaRequest extends FormRequest
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'start_date' => ['required', 'date'],
-            'exp_date' => ['required', 'date']
+            'exp_date' => ['required', 'date'],
+            'active' => ['nullable', 'boolean']
         ];
     }
 }
