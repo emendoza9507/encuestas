@@ -4,5 +4,5 @@ export default interface Respuesta {
     id: string,
     pregunta_id: string,
     text: string,
-    pregunta?: Pregunta
+    pregunta: Pregunta
 }

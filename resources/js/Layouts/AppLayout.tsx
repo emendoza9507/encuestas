@@ -210,6 +210,15 @@ export default function AppLayout({
                   >
                     {/* <!-- Account Management --> */}
                     <div className="block px-4 py-2 text-xs text-gray-400">
+                      Gestion de Encuestas
+                    </div>
+
+                    <DropdownLink href={route('encuesta.index')}>
+                      Encuestas
+                    </DropdownLink>
+
+                    {/* <!-- Account Management --> */}
+                    <div className="block px-4 py-2 text-xs text-gray-400">
                       Manage Account
                     </div>
 

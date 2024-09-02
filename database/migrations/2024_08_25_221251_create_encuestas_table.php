@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('exp_date');
             $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

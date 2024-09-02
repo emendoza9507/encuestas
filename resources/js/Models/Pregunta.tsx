@@ -1,3 +1,4 @@
+import { User } from "@/types"
 import Encuesta from "./Encuesta"
 import Respuesta from "./Respuesta"
 import TipoPregunta from "./TipoPregunta"
@@ -10,5 +11,6 @@ export default interface Pregunta
     text: string
     encuesta?: Encuesta
     respuestas?: Respuesta[],
-    tipoPregunta?: TipoPregunta
+    tipoPregunta?: TipoPregunta,
+    participantes?: any[]
 }

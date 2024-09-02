@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('respuesta_users', function (Blueprint $table) {
+        Schema::create('respuesta_user', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('encuesta_id')->references('id')->on('encuestas');
+            $table->foreignId('pregunta_id')->references('id')->on('preguntas');
             $table->foreignId('respuesta_id')->references('id')->on('respuestas');
             $table->foreignId('user_id')->references('id')->on('users');
             $table->string('text')->nullable();
             $table->timestamps();
 
-            $table->primary(['respuesta_id', 'user_id']);
+            $table->unique(['pregunta_id', 'user_id']);
+            $table->index(['encuesta_id', 'user_id']);
         });
     }
 

@@ -35,9 +35,9 @@ class EncuestasPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Encuesta $encuestas): bool
+    public function update(User $user, Encuesta $encuesta): bool
     {
-        //
+        return $user->id == $encuesta->created_by;
     }
 
     /**

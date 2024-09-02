@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
+import moment from 'moment';
 import { Link, useForm, Head } from '@inertiajs/react';
 import Welcome from '@/Components/Welcome';
 import AppLayout from '@/Layouts/AppLayout';
@@ -6,31 +7,51 @@ import Question from '@/Components/icons/Question';
 import Users from '@/Components/icons/Users';
 import Ligth from '@/Components/icons/Light';
 import useRoute from '@/Hooks/useRoute';
+import Encuesta from '@/Models/Encuesta';
+import { Auth, User } from '@/types';
+import route from 'ziggy-js';
 
-interface Encuesta {
-    title: string;
-    description: string;
-    active: boolean;
+interface Props {
+    auth: Auth
+    encuestas: Encuesta[]
 }
 
-export default function Dashboard() {
-    const encuestas: Encuesta[] = [
-        { active: true, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: false, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: true, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: true, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: false, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: true, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: true, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: false, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: true, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: false, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' },
-        { active: true, description: 'Descripcion de la encuesta Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quidem excepturi laborum, tempore aliquam ut quisquam maxime fuga! Doloremque quo error vel minus illo consectetur consequuntur eligendi magnam, eveniet ex?', title: 'Titulo de la encuesta' }
-    ]
+interface ItemProps {
+    auth: Auth
+    encuesta: Encuesta
+}
+
+function EncuestaView({ encuesta, auth }: ItemProps) {
+
+    useEffect(() => {
+        // console.log(encuesta)
+    }, [])
+
+    return (
+        <article className='encuesta-item bg-gray-500 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
+            <header className='p-3'>
+                <Link href={route('encuesta.show', {encuestum: encuesta.id})}>{encuesta.title}</Link>
+            </header>
+            <div className='p-3'>{encuesta.description}</div>
+            <footer className={`flex justify-between p-3 ${encuesta.active ? 'active' : ''}`}>
+                <div className='flex flex-row gap-3'>
+                    <span className='flex items-center text-green-300'><Ligth title='Activa' /></span>
+                    <span className='flex items-center'><Question title='Preguntas' />: <i>{encuesta.preguntas?.length}</i></span>
+                    <span className='flex items-center'><Users title='Participantes' />: {encuesta.participantes?.length}</span>
+                </div>
+                <div className='flex flex-row gap-3'>
+                    <span><b>Por:</b> <i className={(encuesta.created_by == auth.user?.id ? 'underline' : '').concat(" cursor-pointer")}>{encuesta.creador?.name}</i></span>
+                    <span><b>Desde:</b> <i>{moment(encuesta.start_date).format('DD/MM/YYYY')}</i></span>
+                    <span><b>Hasta:</b> <i>{moment(encuesta.exp_date).format('DD/MM/YYYY')}</i></span>
+                </div>
+            </footer>
+        </article>
+    )
+}
+
+export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>) {
     const form = useForm()
     const route = useRoute();
-
-
 
     return (
         <AppLayout
@@ -50,23 +71,7 @@ export default function Dashboard() {
 
                     <section className="">
                         {encuestas.map(encuesta => (
-                            <article className='encuesta-item bg-gray-500 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
-                                <header className='p-3'>
-                                    {encuesta.title}
-                                </header>
-                                <div className='p-3'>{encuesta.description}</div>
-                                <footer className={`flex justify-between p-3 ${encuesta.active ? 'active': ''}`}>
-                                    <div className='flex flex-row gap-3'>
-                                        <span className='flex items-center'><Ligth title='Activa' />: no</span>
-                                        <span className='flex items-center'><Question title='Preguntas' />: <i>85</i></span>
-                                        <span className='flex items-center'><Users title='Participantes' />: 56</span>
-                                    </div>
-                                    <div className='flex flex-row gap-3'>
-                                        <span><b>Desde:</b> <i>0/09/2344</i></span>
-                                        <span><b>Hasta:</b> <i>0/09/2344</i></span>
-                                    </div>
-                                </footer>
-                            </article>
+                            <EncuestaView key={encuesta.id} auth={auth} encuesta={encuesta}/>
                         ))}
                     </section>
                 </div>

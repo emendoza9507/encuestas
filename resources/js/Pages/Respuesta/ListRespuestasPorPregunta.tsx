@@ -1,44 +1,26 @@
 import Check from "@/Components/icons/Check"
 import Pregunta from "@/Models/Pregunta"
 import Respuesta from "@/Models/Respuesta"
-import React, { PropsWithChildren, useState } from "react"
+import React, { PropsWithChildren, useContext, useState } from "react"
+import RespuestaItem from "./partial/RespuestaItem"
+import RespuestaUserContext from "../Pregunta/context/RespuestaUserContext"
 
 interface Props {
     pregunta: Pregunta,
     onSelectRespuesta?: (respuesta: Respuesta) => void
 }
 
-interface ItemProps {
-    respuesta: Respuesta,
-    index: number,
-    active?: boolean
-    onClick?: () => void
-}
-
-function RespuestaItem({respuesta, index, active, onClick}: PropsWithChildren<ItemProps>) {
-    return (
-        <article onClick={onClick} className="flex gap-2 group">
-
-            <span className={`${!active ? 'text-gray-300' : 'text-red-300'} group-hover:text-red-300 relative`}>
-                {active && <span className="absolute right-4"><Check/></span>}
-                {index}.
-            </span>
-            <p className="text-gray-300 group-hover:text-red-300">{respuesta.text}</p>
-        </article>
-    )
-}
 
 export default function ListRespuestasPorPregunta({
     pregunta,
     onSelectRespuesta
 }: PropsWithChildren<Props>) {
-    const [respuestaMarcada, setRespuestaMarcada] = useState<Respuesta>();
+    // const [respuestaMarcada, setRespuestaMarcada] = useState<Respuesta>();
+
+    const { respuestaMarcada, setRespuestaMarcada } = useContext(RespuestaUserContext)
 
     function handleMarcarRespuesta(respuesta: Respuesta) {
-        setRespuestaMarcada((prevState: Respuesta | undefined) => {
-            onSelectRespuesta && onSelectRespuesta(respuesta);
-            return respuesta
-        })
+        setRespuestaMarcada(respuesta);
     }
 
     return (

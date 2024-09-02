@@ -1,3 +1,4 @@
+import { User } from "@/types"
 import Pregunta from "./Pregunta"
 
 export default interface Encuesta
@@ -9,5 +10,7 @@ export default interface Encuesta
     exp_date: string,
     active: string,
     created_by: number,
-    preguntas?: Pregunta[]
+    preguntas?: Pregunta[],
+    participantes?: User[],
+    creador?: User
 }

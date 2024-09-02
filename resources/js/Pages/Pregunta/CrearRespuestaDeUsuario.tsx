@@ -1,34 +1,45 @@
 import DialogModal from "@/Components/DialogModal";
 import Pregunta from "@/Models/Pregunta";
 import Respuesta from "@/Models/Respuesta";
-import { User } from "@/types";
+import { Auth, User } from "@/types";
 import { useForm } from "@inertiajs/react";
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useContext, useEffect, useState } from "react";
+import route from "ziggy-js";
+import RespuestaUserContext from "./context/RespuestaUserContext";
 
 interface Props {
     pregunta: Pregunta
     respuesta: Respuesta
-    auth: {
-        user: User
-    }
+    auth: Auth
 }
 
-export default function CrearRespuestDeUsuario({ pregunta, respuesta, auth }: PropsWithChildren<Props>) {
+export default function CrearRespuestDeUsuario({ pregunta, auth }: PropsWithChildren<Props>) {
     const [openFormularioRepuesta, setOpenFormularioRespuesta] = useState(false);
+    const { respuestaMarcada } = useContext(RespuestaUserContext);
+
     const form = useForm({
-        respuesta_id: respuesta.id,
-        user_id: auth.user.id,
+        encuesta_id: pregunta.encuesta_id,
+        pregunta_id: pregunta.id,
+        respuesta_id: respuestaMarcada?.id,
+        user_id: auth.user?.id,
         text: ''
     })
-    const { tipoPregunta } = pregunta
-    let contentModal = null
+
+    useEffect(() => {
+        form.setData('respuesta_id', respuestaMarcada?.id);
+    }, [respuestaMarcada])
+
 
     // if (!tipoPregunta) return null
 
 
     function onSubmit(e: React.FormEvent) {
         e.preventDefault()
-        console.log('respondiendo')
+        form.post(route('respuesta_user.store'), {
+            onSuccess(res) {
+                setOpenFormularioRespuesta(false);
+            }
+        })
     }
 
 
@@ -38,7 +49,7 @@ export default function CrearRespuestDeUsuario({ pregunta, respuesta, auth }: Pr
             <DialogModal isOpen={openFormularioRepuesta} onClose={() => setOpenFormularioRespuesta(false)}>
                 <form onSubmit={onSubmit}>
                     <DialogModal.Content title='Responder'>
-                        <p className="mb-4">{respuesta.text}</p>
+                        <p className="mb-4">{respuestaMarcada?.text}</p>
                         <div className="inputBx !m-0 !w-full">
                             <span></span>
                             <textarea name="" id="" onChange={e => form.setData('text', e.currentTarget.value)} placeholder="Argumente su respuesta si es necesatio"></textarea>

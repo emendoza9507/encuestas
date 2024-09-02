@@ -29,8 +29,10 @@
     "@inertiajs/react": "^1.2.0",
     "classnames": "^2.5.1",
     "lodash": "^4.17.21",
+    "moment": "^2.30.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "sweetalert2": "^11.12.4",
     "ziggy-js": "^1.8.2"
   },
   "prettier": {
