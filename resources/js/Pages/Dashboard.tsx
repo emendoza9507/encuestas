@@ -18,17 +18,20 @@ interface Props {
 
 interface ItemProps {
     auth: Auth
-    encuesta: Encuesta
+    encuesta: Encuesta,
+    delay: number
 }
 
-function EncuestaView({ encuesta, auth }: ItemProps) {
-
+function EncuestaView({ encuesta, auth, delay }: ItemProps) {
+    const [opacity, setOpacity] = useState(0);
     useEffect(() => {
-        // console.log(encuesta)
+        delay && setTimeout(() => {
+            setOpacity(1)
+        }, delay * 1000)
     }, [])
 
     return (
-        <article className='encuesta-item bg-gray-500 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
+        <article style={{animationDelay: delay + 's', opacity: opacity}} className='encuesta-item animate-fadeInUp bg-gray-500 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
             <header className='p-3'>
                 <Link href={route('encuesta.show', {encuestum: encuesta.id})}>{encuesta.title}</Link>
             </header>
@@ -53,6 +56,8 @@ export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>)
     const form = useForm()
     const route = useRoute();
 
+    const [ecue, setEncuestas] = useState<Encuesta[]>([])
+
     return (
         <AppLayout
             title="Dashboard"
@@ -70,8 +75,8 @@ export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>)
                     </div>
 
                     <section className="">
-                        {encuestas.map(encuesta => (
-                            <EncuestaView key={encuesta.id} auth={auth} encuesta={encuesta}/>
+                        {encuestas.map((encuesta, index) => (
+                            <EncuestaView key={encuesta.id} delay={index + 0.2} auth={auth} encuesta={encuesta}/>
                         ))}
                     </section>
                 </div>
