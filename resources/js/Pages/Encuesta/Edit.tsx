@@ -42,7 +42,7 @@ export default function Edit({encuesta}: Props) {
 
                         <div className='inputBx !w-full'>
                             <span className={form.errors.description ? 'error' : ''}></span>
-                            <textarea value={form.data.description} onChange={e => form.setData('description', e.currentTarget.value)} placeholder='Descripcion'>
+                            <textarea rows={5} value={form.data.description} onChange={e => form.setData('description', e.currentTarget.value)} placeholder='Descripcion'>
 
                             </textarea>
                         </div>

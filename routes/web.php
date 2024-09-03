@@ -3,6 +3,7 @@
 use App\Models\Encuesta;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,13 +22,17 @@ Route::middleware([
     'verified',
     'throttle:global'
 ])->group(function () {
-    Route::get('/', function () {
+
+    Route::get('/', function (Request $request) {
+        $query = $request->query('query', '');
+
         $encuestas = Encuesta::with(['participantes' => function(Builder $query) {
             $query->distinct();
         },'preguntas' => ['participantes'], 'creador'])
+        ->where('title', 'like', '%'.$query.'%')
         ->where('active', true)
         ->orderBy('id', 'desc')
-        ->get();
+        ->paginate(6);
 
         return Inertia::render('Dashboard', [
             'encuestas' => $encuestas

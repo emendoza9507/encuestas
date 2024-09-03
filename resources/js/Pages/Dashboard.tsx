@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
 import moment from 'moment';
-import { Link, useForm, Head } from '@inertiajs/react';
+import { Link, useForm, Head, usePage } from '@inertiajs/react';
 import Welcome from '@/Components/Welcome';
 import AppLayout from '@/Layouts/AppLayout';
 import Question from '@/Components/icons/Question';
@@ -10,10 +10,12 @@ import useRoute from '@/Hooks/useRoute';
 import Encuesta from '@/Models/Encuesta';
 import { Auth, User } from '@/types';
 import route from 'ziggy-js';
+import Pagination, { PaginationProps } from '@/Components/Pagination';
+import { Router, router } from '@inertiajs/core';
 
 interface Props {
     auth: Auth
-    encuestas: Encuesta[]
+    encuestas: PaginationProps<Encuesta>
 }
 
 interface ItemProps {
@@ -31,21 +33,21 @@ function EncuestaView({ encuesta, auth, delay }: ItemProps) {
     }, [])
 
     return (
-        <article style={{animationDelay: delay + 's', opacity: opacity}} className='encuesta-item animate-fadeInUp bg-gray-500 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
-            <header className='p-3'>
+        <article style={{animationDelay: delay + 's', opacity: opacity}} className='encuesta-item flex flex-col justify-between  animate-fadeInUp bg-gray-500 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
+            <header className='p-3 font-bold'>
                 <Link href={route('encuesta.show', {encuestum: encuesta.id})}>{encuesta.title}</Link>
             </header>
-            <div className='p-3'>{encuesta.description}</div>
+            <div className='p-3 text-gray-300'>
+                <div>
+                    <span className='text-white'><b className='bg-cyan-800 px-1 py-0.5'>Autor:</b> <i>{encuesta.creador?.name}</i></span>
+                </div>
+                {encuesta.description}
+            </div>
             <footer className={`flex justify-between p-3 ${encuesta.active ? 'active' : ''}`}>
                 <div className='flex flex-row gap-3'>
                     <span className='flex items-center text-green-300'><Ligth title='Activa' /></span>
                     <span className='flex items-center'><Question title='Preguntas' />: <i>{encuesta.preguntas?.length}</i></span>
                     <span className='flex items-center'><Users title='Participantes' />: {encuesta.participantes?.length}</span>
-                </div>
-                <div className='flex flex-row gap-3'>
-                    <span><b>Por:</b> <i className={(encuesta.created_by == auth.user?.id ? 'underline' : '').concat(" cursor-pointer")}>{encuesta.creador?.name}</i></span>
-                    <span><b>Desde:</b> <i>{moment(encuesta.start_date).format('DD/MM/YYYY')}</i></span>
-                    <span><b>Hasta:</b> <i>{moment(encuesta.exp_date).format('DD/MM/YYYY')}</i></span>
                 </div>
             </footer>
         </article>
@@ -53,10 +55,16 @@ function EncuestaView({ encuesta, auth, delay }: ItemProps) {
 }
 
 export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>) {
-    const form = useForm()
+    const form = useForm({
+        query: ''
+    });
     const route = useRoute();
 
-    const [ecue, setEncuestas] = useState<Encuesta[]>([])
+    function handleSearch(e: React.FormEvent) {
+        e.preventDefault()
+
+        form.get('/');
+    }
 
     return (
         <AppLayout
@@ -67,18 +75,19 @@ export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>)
                     <div className='flex flex-row items-center gap-4'>
                         <div className="inputBx !w-11/12">
                             <span></span>
-                            <input type="search" placeholder='Buscar' />
+                            <input type="search" onChange={({target}) => form.setData('query', target.value)} placeholder='Buscar por nombre de encuesta' />
                         </div>
-                        <form action={route('encuesta.create')} className="inputBx ">
-                            <input type="submit" value="Nueva Encuesta" />
+                        <form onSubmit={handleSearch} className="inputBx ">
+                            <input type="submit" value="Buscar" />
                         </form>
                     </div>
 
-                    <section className="">
-                        {encuestas.map((encuesta, index) => (
-                            <EncuestaView key={encuesta.id} delay={index + 0.2} auth={auth} encuesta={encuesta}/>
+                    <section className="grid grid-col-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-4">
+                        {encuestas.data.map((encuesta, index) => (
+                            <EncuestaView key={encuesta.id} delay={index + 0.01} auth={auth} encuesta={encuesta}/>
                         ))}
                     </section>
+                    <Pagination options={{...encuestas, name: 'encuestas'}}/>
                 </div>
             </div>
         </AppLayout>

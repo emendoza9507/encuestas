@@ -20,10 +20,16 @@ class EncuestaController extends Controller
      */
     public function index(Request $request)
     {
+        $query = $request->query('query');
         $user = Auth::user();
-        $encuestas = $user->encuestas->load('participantes', 'preguntas');
+        $encuestas = Encuesta::with('participantes', 'preguntas')
+                        ->where('created_by', $user->getAuthIdentifier())
+                        ->where('title', 'like', '%'.$query.'%')
+                        ->paginate(6);
+
+
         return Inertia::render('Encuesta/List', compact(
-            'encuestas'
+            'encuestas', 'query'
         ));
     }
 

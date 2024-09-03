@@ -17,7 +17,10 @@ class EncuestaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => fake()->text(100),
+            'description' => fake()->text(400),
+            'start_date' => fake()->unique()->dateTimeBetween('-7 days', '+2 months')->format('Y-m-d'),
+            'exp_date' => fake()->unique()->dateTimeBetween('-7 days', '+2 months')->format('Y-m-d')
         ];
     }
 }

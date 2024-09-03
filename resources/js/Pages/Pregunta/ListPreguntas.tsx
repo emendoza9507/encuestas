@@ -1,5 +1,7 @@
 import FolderOpen from '@/Components/icons/FolderOpen';
+import Pencil from '@/Components/icons/Pencil';
 import Question from '@/Components/icons/Question';
+import Pagination, { PaginationProps } from '@/Components/Pagination';
 import Encuesta from '@/Models/Encuesta';
 import Pregunta from '@/Models/Pregunta';
 import { router } from '@inertiajs/core';
@@ -10,9 +12,7 @@ import route from 'ziggy-js';
 
 interface Props {
     encuesta: Encuesta,
-    preguntas: {
-        data: Pregunta[]
-    }
+    preguntas: PaginationProps<Pregunta>
 }
 
 interface PreguntaItemProps {
@@ -39,8 +39,8 @@ function PreguntaItem({ pregunta, index }: PreguntaItemProps) {
                 <Link href={route('pregunta.show', { preguntum: pregunta.id })}>
                     <FolderOpen/>
                 </Link>
-                <span >
-                    <Question/> : {respuestas.length}
+                <span className='flex gap-2'>
+                    <Pencil/> {respuestas.length}
                 </span>
             </footer>
         </article>
@@ -48,9 +48,6 @@ function PreguntaItem({ pregunta, index }: PreguntaItemProps) {
 }
 
 export default function ListPreguntas({ encuesta, preguntas }: Props) {
-
-    console.log(preguntas)
-
     return (
         <section>
             <div className='flex justify-between font-bold text-gray-300'>
@@ -62,6 +59,9 @@ export default function ListPreguntas({ encuesta, preguntas }: Props) {
             {preguntas.data.map((pregunta, index) => (
                 <PreguntaItem index={index + 1} key={pregunta.id} pregunta={pregunta} />
             ))}
+
+            <Pagination options={{...preguntas, name: 'preguntas'}}/>
+
         </section>
     )
 }

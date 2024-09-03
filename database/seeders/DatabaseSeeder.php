@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Respuesta;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,5 +24,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(TipoPreguntasSeeder::class);
+        $this->call(EncuestaSeeder::class);
+        $this->call(PreguntaSeeder::class);
+        $this->call(RespuestaSeeder::class);
     }
 }

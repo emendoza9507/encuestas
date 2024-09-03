@@ -12,6 +12,8 @@ import Question from '@/Components/icons/Question';
 import RespuestaUser from '@/Models/RespuestaUser';
 import RespuestaItem from '../Respuesta/partial/RespuestaItem';
 import RespuestaUserContext from './context/RespuestaUserContext';
+import { Link } from '@inertiajs/react';
+import route from 'ziggy-js';
 
 interface IPregunta extends Pregunta {
     respuestas: Respuesta[]
@@ -37,10 +39,11 @@ export default function ShowPregunta({ pregunta, auth, respuesta_user }: Props) 
             <AppLayout title='Pregunta'>
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <h3 className='text-gray-300 text-xl flex gap-2'>
+                    <div className='flex text-white text-3xl mb-4 items-center'><Question className='size-14'/> <span className='text-5xl'>DETALLE DE LA PREGUNTA</span></div>
+                        <Link href={route('encuesta.show', { encuestum: pregunta.encuesta_id })} className='text-gray-300 text-xl flex gap-2 mb-2'>
                             <DocumentList />
                             {pregunta.encuesta?.title}
-                        </h3>
+                        </Link>
                         <p className='text-white text-sm uppercase mb-4 flex gap-2'>
                             <Question />
                             {pregunta.text}

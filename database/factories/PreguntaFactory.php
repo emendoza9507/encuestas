@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\TipoPregunta;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,11 @@ class PreguntaFactory extends Factory
      */
     public function definition(): array
     {
+        $tipoPregunta = TipoPregunta::all();
+
         return [
-            //
+            'text' => fake()->text(),
+            'tipo_pregunta_id' => $tipoPregunta->random()
         ];
     }
 }
