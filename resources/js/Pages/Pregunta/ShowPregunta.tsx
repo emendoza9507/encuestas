@@ -35,11 +35,11 @@ export default function ShowPregunta({ pregunta, auth, respuesta_user }: Props) 
     const respuestaUserIndex = pregunta.respuestas && respuesta_user && pregunta.respuestas.findIndex((respuesta) => respuesta.id == respuesta_user.respuesta_id) + 1
 
     return (
-        <RespuestaUserContext.Provider value={{respuestaMarcada: respuestaMaracada, setRespuestaMarcada: setRespuestaMarcada}}>
+        <RespuestaUserContext.Provider value={{ respuestaMarcada: respuestaMaracada, setRespuestaMarcada: setRespuestaMarcada }}>
             <AppLayout title='Pregunta'>
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className='flex text-white text-3xl mb-4 items-center'><Question className='size-14'/> <span className='text-5xl'>DETALLE DE LA PREGUNTA</span></div>
+                        <div className='flex text-white text-3xl mb-4 items-center'><h1 className='text-5xl'>DETALLE DE LA PREGUNTA</h1></div>
                         <Link href={route('encuesta.show', { encuestum: pregunta.encuesta_id })} className='text-gray-300 text-xl flex gap-2 mb-2'>
                             <DocumentList />
                             {pregunta.encuesta?.title}
@@ -68,7 +68,7 @@ export default function ShowPregunta({ pregunta, auth, respuesta_user }: Props) 
 
                         </div>
 
-                        <ListRespuestasPorPregunta pregunta={pregunta}  />
+                        <ListRespuestasPorPregunta pregunta={pregunta} />
 
 
                         <section className="mt-4">
@@ -80,8 +80,8 @@ export default function ShowPregunta({ pregunta, auth, respuesta_user }: Props) 
 
                             {respuestaUser && (
                                 <>
-                                <RespuestaItem active respuesta={respuestaUser} index={respuestaUserIndex} />
-                                <p className='px-5 text-gray-200 opacity-60'>{respuesta_user.text}</p>
+                                    <RespuestaItem active respuesta={respuestaUser} index={respuestaUserIndex} />
+                                    <p className='px-5 text-gray-200 opacity-60'>{respuesta_user.text}</p>
                                 </>
                             )}
                         </section>

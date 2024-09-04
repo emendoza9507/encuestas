@@ -55,15 +55,21 @@ function EncuestaView({ encuesta, auth, delay }: ItemProps) {
 }
 
 export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>) {
+    const [filterEncustas, setFilerEncuestas] = useState({...encuestas})
+    const route = useRoute();
+
     const form = useForm({
         query: ''
     });
-    const route = useRoute();
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault()
 
         form.get('/');
+    }
+
+    function handleFilterSearch(e: React.KeyboardEvent) {
+        setFilerEncuestas({...encuestas, data: encuestas.data.filter(encuesta => encuesta.title.toLowerCase().includes(form.data.query.toLowerCase()))})
     }
 
     return (
@@ -75,7 +81,7 @@ export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>)
                     <div className='flex flex-row items-center gap-4'>
                         <div className="inputBx !w-11/12">
                             <span></span>
-                            <input type="search" onChange={({target}) => form.setData('query', target.value)} placeholder='Buscar por nombre de encuesta' />
+                            <input type="search" onKeyUp={handleFilterSearch} onChange={({target}) => form.setData('query', target.value)} placeholder='Buscar por nombre de encuesta' />
                         </div>
                         <form onSubmit={handleSearch} className="inputBx ">
                             <input type="submit" value="Buscar" />
@@ -83,7 +89,7 @@ export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>)
                     </div>
 
                     <section className="grid grid-col-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-4">
-                        {encuestas.data.map((encuesta, index) => (
+                        {filterEncustas.data.map((encuesta, index) => (
                             <EncuestaView key={encuesta.id} delay={index + 0.01} auth={auth} encuesta={encuesta}/>
                         ))}
                     </section>

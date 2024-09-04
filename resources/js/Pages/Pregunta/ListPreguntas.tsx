@@ -9,6 +9,8 @@ import { Link, useForm } from '@inertiajs/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import route from 'ziggy-js';
+import Edit from './Edit';
+import Delete from './Delete';
 
 interface Props {
     encuesta: Encuesta,
@@ -25,23 +27,29 @@ function PreguntaItem({ pregunta, index }: PreguntaItemProps) {
     const form = useForm();
 
     useEffect(() => {
-        axios.get(route('api.pregunta.show', {preguntum: pregunta.id}))
-        .then(res => {
-            setRespuestas(res.data.pregunta.respuestas)
-        })
+        axios.get(route('api.pregunta.show', { preguntum: pregunta.id }))
+            .then(res => {
+                setRespuestas(res.data.pregunta.respuestas)
+            })
     }, [])
 
 
     return (
         <article className='mb-4 bg-gray-600 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
             <div className='p-3' onClick={() => router.visit(route('pregunta.show', { preguntum: pregunta.id }))}>{pregunta.text}</div>
-            <footer className={`flex gap-3 p-3 bg-gray-700`}>
-                <Link href={route('pregunta.show', { preguntum: pregunta.id })}>
-                    <FolderOpen/>
-                </Link>
-                <span className='flex gap-2'>
-                    <Pencil/> {respuestas.length}
-                </span>
+            <footer className={`flex justify-between p-3 bg-gray-700`}>
+                <div className='flex gap-3 '>
+                    <Link href={route('pregunta.show', { preguntum: pregunta.id })}>
+                        <FolderOpen />
+                    </Link>
+                    <span className='flex gap-2'>
+                        <Pencil /> {respuestas.length}
+                    </span>
+                </div>
+                <div className='flex gap-3'>
+                    <Edit pregunta={pregunta}/>
+                    <Delete pregunta={pregunta}/>
+                </div>
             </footer>
         </article>
     )
@@ -60,7 +68,7 @@ export default function ListPreguntas({ encuesta, preguntas }: Props) {
                 <PreguntaItem index={index + 1} key={pregunta.id} pregunta={pregunta} />
             ))}
 
-            <Pagination options={{...preguntas, name: 'preguntas'}}/>
+            <Pagination options={{ ...preguntas, name: 'preguntas' }} />
 
         </section>
     )

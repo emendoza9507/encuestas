@@ -99,7 +99,7 @@ export default function List({ encuestas, message, query }: Props) {
     }
 
     function handleFilterSearch(e: React.KeyboardEvent) {
-        setFilerEncuestas({...encuestas, data: encuestas.data.filter(encuesta => encuesta.title.includes(form.data.query))})
+        setFilerEncuestas({...encuestas, data: encuestas.data.filter(encuesta => encuesta.title.toLowerCase().includes(form.data.query.toLowerCase()))})
     }
 
     return (

@@ -73,8 +73,22 @@ class PreguntaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pregunta $Pregunta)
+    public function destroy(Pregunta $preguntum)
     {
         //
+        $user = Auth::user();
+        if($preguntum->encuesta->created_by != $user->getAuthIdentifier()) {
+            return redirect()->back()->with('message','No puede eliminar esta pregunta.');
+        }
+
+        //Eliminar las respeusta de los ususarios
+        RespuestaUser::where('pregunta_id', $preguntum->id)->delete();
+        //Eliminar las posobles respuestas
+        Respuesta::where('pregunta_id', $preguntum->id)->delete();
+        //Eliminar la Pregunta
+
+        $preguntum->delete();
+
+        return redirect()->back()->with('message', 'Pregunta eliminada.');
     }
 }
