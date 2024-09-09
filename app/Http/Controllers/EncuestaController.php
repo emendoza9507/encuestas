@@ -11,6 +11,7 @@ use App\Models\TipoPregunta;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class EncuestaController extends Controller
@@ -38,6 +39,7 @@ class EncuestaController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Encuesta::class);
         return Inertia::render('Encuesta/NuevaEncuesta', array(
 
         ));
@@ -48,6 +50,7 @@ class EncuestaController extends Controller
      */
     public function store(StoreEncuestaRequest $request)
     {
+        Gate::authorize('create', Encuesta::class);
         $encuesta = Encuesta::create([...$request->validated(), 'created_by' => $request->user()->id]);
 
         return redirect()->route('encuesta.show', $encuesta->id)->with('message', 'Encuesta creada...');
@@ -56,8 +59,9 @@ class EncuestaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Encuesta $encuestum)
+    public function show(Request $request, Encuesta $encuestum)
     {
+        Gate::authorize('view', [Encuesta::class, $encuestum]);
         $tipos_pregunta = TipoPregunta::all();
         $encuestum->load(['participantes' => function(Builder $query) {
             $query->distinct();
@@ -68,7 +72,16 @@ class EncuestaController extends Controller
         return Inertia::render('Encuesta/Detail', array(
             'encuesta' => $encuestum,
             'tipos_pregunta' => $tipos_pregunta,
-            'preguntas' => $preguntas
+            'preguntas' => $preguntas,
+            'auth' => [
+                'user' => $request->user(),
+                'permissions' => [
+                    'encuesta' => [
+                        'update' => $request->user()->can('update', [Encuesta::class, $encuestum]),
+                        'delete' => $request->user()->can('delete', [Encuesta::class, $encuestum])
+                    ]
+                ]
+            ]
         ));
     }
 
@@ -77,7 +90,7 @@ class EncuestaController extends Controller
      */
     public function edit(Encuesta $encuestum)
     {
-
+        Gate::authorize('update', [Encuesta::class, $encuestum]);
         $authUser = Auth::user();
         if($authUser->getAuthIdentifier() !== $encuestum->created_by) {
             return redirect()->back()->with('message', 'No tiene permitido eliminar esta encuesta.');
@@ -93,6 +106,7 @@ class EncuestaController extends Controller
      */
     public function update(UpdateEncuestaRequest $request, Encuesta $encuestum)
     {
+        Gate::authorize('update', [Encuesta::class, $encuestum]);
         $encuestum->update($request->validated());
 
         return redirect()->to(route('encuesta.index'));

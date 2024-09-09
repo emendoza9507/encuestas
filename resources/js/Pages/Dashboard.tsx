@@ -54,7 +54,7 @@ function EncuestaView({ encuesta, auth, delay }: ItemProps) {
     )
 }
 
-export default function Dashboard({ encuestas, auth }: PropsWithChildren<Props>) {
+export default function Dashboard({ encuestas, auth, ...props }: PropsWithChildren<Props>) {
     const [filterEncustas, setFilerEncuestas] = useState({...encuestas})
     const route = useRoute();
 

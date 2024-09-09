@@ -7,12 +7,16 @@ import Pregunta from '@/Models/Pregunta';
 import { router } from '@inertiajs/core';
 import { Link, useForm } from '@inertiajs/react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import route from 'ziggy-js';
 import Edit from './Edit';
 import Delete from './Delete';
+import useRoute from '@/Hooks/useRoute';
+import { Auth } from '@/types';
+import UserContext from '@/Contexts/UserContext';
 
 interface Props {
+    auth: Auth
     encuesta: Encuesta,
     preguntas: PaginationProps<Pregunta>
 }
@@ -25,6 +29,7 @@ interface PreguntaItemProps {
 function PreguntaItem({ pregunta, index }: PreguntaItemProps) {
     const [respuestas, setRespuestas] = useState([])
     const form = useForm();
+    const { auth } = useContext(UserContext);
 
     useEffect(() => {
         axios.get(route('api.pregunta.show', { preguntum: pregunta.id }))
@@ -33,10 +38,12 @@ function PreguntaItem({ pregunta, index }: PreguntaItemProps) {
             })
     }, [])
 
-
     return (
         <article className='mb-4 bg-gray-600 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
-            <div className='p-3' onClick={() => router.visit(route('pregunta.show', { preguntum: pregunta.id }))}>{pregunta.text}</div>
+            <div className='p-3 flex gap-1' onClick={() => router.visit(route('pregunta.show', { preguntum: pregunta.id }))}>
+                <Question/>
+                {pregunta.text}
+            </div>
             <footer className={`flex justify-between p-3 bg-gray-700`}>
                 <div className='flex gap-3 '>
                     <Link href={route('pregunta.show', { preguntum: pregunta.id })}>
@@ -47,15 +54,15 @@ function PreguntaItem({ pregunta, index }: PreguntaItemProps) {
                     </span>
                 </div>
                 <div className='flex gap-3'>
-                    <Edit pregunta={pregunta}/>
-                    <Delete pregunta={pregunta}/>
+                    {auth.permissions.encuesta?.update && <Edit pregunta={pregunta}/>}
+                    {auth.permissions.encuesta?.delete && <Delete pregunta={pregunta}/>}
                 </div>
             </footer>
         </article>
     )
 }
 
-export default function ListPreguntas({ encuesta, preguntas }: Props) {
+export default function ListPreguntas({ encuesta, preguntas}: Props) {
     return (
         <section>
             <div className='flex justify-between font-bold text-gray-300'>

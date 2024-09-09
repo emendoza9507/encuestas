@@ -58,7 +58,7 @@ export default function CrearRespuestDeUsuario({ pregunta, auth }: PropsWithChil
                     <DialogModal.Footer>
                         <div className='inputBx !m-0'>
                             <button type="submit">
-                                Responeder
+                                Responder
                             </button>
                         </div>
                     </DialogModal.Footer>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Encuesta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 
@@ -36,8 +38,21 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+
+        $user = Auth::user();
         return array_merge(parent::share($request), [
-            'message' => Session::get('message', null)
+            'auth' => [
+                'user' => $request->user(),
+                'permissions' => [
+                    'encuesta' => [
+                        'create' => $user ? $request->user()->can('create', Encuesta::class) : false,
+                        'viewAny' => $user ? $request->user()->can('viewAny', Encuesta::class) : false
+                    ]
+                ]
+            ],
+            'can' => $user ? $user->getAllPermissions() : [],
+            'roles' => $user ? $user->getRoleNames() : [],
+            'message' => Session::get('message', null),
         ]);
     }
 }

@@ -6,14 +6,14 @@ use App\Models\Encuesta;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class EncuestasPolicy
+class EncuestaPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -21,7 +21,15 @@ class EncuestasPolicy
      */
     public function view(User $user, Encuesta $encuesta): bool
     {
-        //
+        if($encuesta->create_by == $user->id) {
+            return true;
+        }
+
+        if($encuesta->active == true) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -29,23 +37,23 @@ class EncuestasPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->can('encuesta.store');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Encuesta $encuesta): bool
+    public function update(User $user, Encuesta $encuestum): bool
     {
-        return $user->id == $encuesta->created_by;
+        return $user->can('encuesta.update') && $user->id == $encuestum->created_by;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Encuesta $encuestas): bool
+    public function delete(User $user, Encuesta $encuestum): bool
     {
-        //
+        return $user->can('encuesta.delete') && $user->id == $encuestum->created_by;
     }
 
     /**
