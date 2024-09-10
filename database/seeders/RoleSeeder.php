@@ -39,6 +39,7 @@ class RoleSeeder extends Seeder
             'password' => Hash::make('matahambre')
         ]);
 
+
         $user->assignRole($role3);
     }
 }

@@ -32,10 +32,16 @@ function PreguntaItem({ pregunta, index }: PreguntaItemProps) {
     const { auth } = useContext(UserContext);
 
     useEffect(() => {
-        axios.get(route('api.pregunta.show', { preguntum: pregunta.id }))
+        let script = setTimeout(() => {
+            axios.get(route('api.pregunta.show', { preguntum: pregunta.id }))
             .then(res => {
                 setRespuestas(res.data.pregunta.respuestas)
             })
+        }, 50)
+
+        return () => {
+            clearTimeout(script);
+        }
     }, [])
 
     return (

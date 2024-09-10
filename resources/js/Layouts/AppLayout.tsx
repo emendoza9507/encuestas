@@ -28,6 +28,8 @@ export default function AppLayout({
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+
+
     function switchToTeam(e: React.FormEvent, team: Team) {
         e.preventDefault();
         router.put(
@@ -214,9 +216,9 @@ export default function AppLayout({
                                             Gestion de Encuestas
                                         </div>
 
-                                        <DropdownLink href={route('encuesta.index')}>
+                                        {page.props.auth.permissions.encuesta.create && (<DropdownLink href={route('encuesta.index')}>
                                             Mis encuestas
-                                        </DropdownLink>
+                                        </DropdownLink>)}
 
                                         {/* <!-- Account Management --> */}
                                         <div className="block px-4 py-2 text-xs text-gray-400">
@@ -323,9 +325,9 @@ export default function AppLayout({
                             </div>
 
                             <div className="mt-3 space-y-1">
-                                <ResponsiveNavLink href={route('encuesta.index') } active={route().current('profile.index')}>
+                                {page.props.auth.permissions.encuesta.create && (<ResponsiveNavLink href={route('encuesta.index')} active={route().current('profile.index')}>
                                     Mis encuestas
-                                </ResponsiveNavLink>
+                                </ResponsiveNavLink>)}
 
                                 <ResponsiveNavLink
                                     href={route('profile.show')}

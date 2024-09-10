@@ -21,5 +21,17 @@ class DatabaseSeeder extends Seeder
         $this->call(EncuestaSeeder::class);
         $this->call(PreguntaSeeder::class);
         $this->call(RespuestaSeeder::class);
+
+
+        User::factory()->create([
+            'name' => 'Lisandra Cayamo Tamayo',
+            'email' => 'lcayamo@gmail.com',
+            'password' => Hash::make('matahambre')
+        ]);
+
+
+        User::factory(10)->create([
+            'password' => Hash::make('matahambre')
+        ]);
     }
 }

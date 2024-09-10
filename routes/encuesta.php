@@ -6,6 +6,7 @@ use App\Http\Controllers\RespuestaController;
 use App\Http\Controllers\RespuestaUserController;
 use App\Http\Controllers\TipoPreguntaController;
 use App\Http\Controllers\TipoPreguntasController;
+use App\Http\Controllers\UserController;
 use App\Models\RespuestaUser;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,5 @@ Route::middleware([
     Route::resource('pregunta', PreguntaController::class);
     Route::resource('respuesta', RespuestaController::class);
     Route::resource('respuesta_user', RespuestaUserController::class)->only(['store', 'show']);
+    Route::resource('usuario', UserController::class);
 });

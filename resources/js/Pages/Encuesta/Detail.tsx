@@ -41,8 +41,6 @@ export default function Detail({ encuesta, tipos_pregunta, preguntas, auth, can,
         })
     }
 
-    const canAddQuestion = auth.user?.id == encuesta.created_by;
-
     function hasPermissions(permisions:string[]) {
         return can.some(p => permisions.includes(p))
     }

@@ -30,6 +30,7 @@ export interface Auth {
       current_team?: Team;
     }
   >;
+  permissions: {[key: string]: any}
 }
 
 export type InertiaSharedProps<T = {}> = T & {
