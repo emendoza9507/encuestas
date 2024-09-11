@@ -15,6 +15,10 @@ import Pregunta from '@/Models/Pregunta';
 import { PaginationProps } from '@/Components/Pagination';
 import EncuestaContext from './context/EncuestaContext';
 import UserContext from '@/Contexts/UserContext';
+import { router } from '@inertiajs/core';
+import Trash from '@/Components/icons/Trash';
+import Swal from 'sweetalert2';
+import Stats from '@/Components/icons/Stats';
 
 interface Props {
     encuesta: Encuesta,
@@ -41,7 +45,7 @@ export default function Detail({ encuesta, tipos_pregunta, preguntas, auth, can,
         })
     }
 
-    function hasPermissions(permisions:string[]) {
+    function hasPermissions(permisions: string[]) {
         return can.some(p => permisions.includes(p))
     }
 
@@ -49,8 +53,38 @@ export default function Detail({ encuesta, tipos_pregunta, preguntas, auth, can,
         return roles.some(p => rols.includes(p))
     }
 
+    function handleClearEncuesta() {
+        Swal.fire({
+            title: 'Atención',
+            text: 'Eliminara los datos relacionados con la encuesta',
+            showCancelButton: true,
+            backdrop: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, eliminalos!"
+        }).then(resul => {
+            if(resul.isConfirmed) {
+                router.delete(route('encuesta.clear', { encuesta: encuesta.id }), {
+                    onError() {},
+                    onSuccess() {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'La encuesta se ha inicializado satisfactoriamente!'
+                        })
+                    }
+                })
+            }
+        })
+    }
+
+    function openParticipationList() {
+        if(hasRoles(['Super-Admin', 'admin', 'encuestador'])) {
+            router.visit(route('encuesta.participantes', { encuesta: encuesta.id }))
+        }
+    }
+
     return (
-        <UserContext.Provider value={{auth: auth, can:can, roles: roles, hasPermissions: hasPermissions, hasRoles: hasRoles}}>
+        <UserContext.Provider value={{ auth: auth, can: can, roles: roles, hasPermissions: hasPermissions, hasRoles: hasRoles }}>
             <EncuestaContext.Provider value={{ tiposDePreguntas: tipos_pregunta, setSetTiposDePreguntas() { } }}>
                 <AppLayout title='Encuesta'>
                     <div className="py-12">
@@ -63,11 +97,30 @@ export default function Detail({ encuesta, tipos_pregunta, preguntas, auth, can,
 
 
                             <ul className='mb-2 text-green-200 flex gap-2'>
-                                <li className='flex gap-1 items-center'><Users title='Participantes' />participantes: {encuesta.participantes?.length}</li>
+                                <li className='flex gap-1 items-center' onClick={openParticipationList}><Users title='Participantes' />participantes: {encuesta.participantes?.length}</li>
                                 <li className='flex gap-1 items-center'><Question title='Preguntas' />preguntas: {preguntas.total}</li>
                             </ul>
 
-                            { hasRoles(['Super-Admin', 'admin', 'encuestador']) && <button type='button' className='bg-blue-600 p-2 text-gray-300 mb-4 hover:bg-blue-400' onClick={() => setOpenNewQuestionModal(true)}>Agregar pregunta</button> }
+                            <div className='flex gap-2'>
+                                {hasRoles(['Super-Admin', 'admin', 'encuestador']) && <button type='button' className='bg-blue-600 p-2 text-gray-300 mb-4 hover:bg-blue-700' onClick={() => setOpenNewQuestionModal(true)}>Agregar pregunta</button>}
+
+                                {hasRoles(['Super-Admin', 'admin', 'encuestador']) &&
+                                    <button
+                                        type='button'
+                                        className='bg-yellow-600 mx-2 p-2 text-gray-300 mb-4 hover:bg-yellow-700'
+                                        onClick={() => router.visit(route('encuesta.stats', { encuesta: encuesta.id }))}>
+                                        <span className='flex'><Stats/> Estadísticas</span>
+                                    </button>}
+
+                                {hasRoles(['Super-Admin', 'admin']) &&
+                                    <button
+                                        type='button'
+                                        className='bg-red-600 mx-2 p-2 text-gray-300 mb-4 hover:bg-red-700'
+                                        onClick={handleClearEncuesta}>
+                                        <span className='flex'><Trash /> Limpiar</span>
+                                    </button>}
+                            </div>
+
 
                             <ListPreguntas encuesta={encuesta} auth={auth} preguntas={preguntas} />
 

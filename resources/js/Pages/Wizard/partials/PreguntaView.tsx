@@ -20,8 +20,7 @@ interface Props {
 
 export default function PreguntaView({ pregunta, isLast, isFirst, onSubmited, onBack }: Props) {
     const page = usePage<any>();
-
-    const form = useForm<{
+    const [state, setState] = useState<{
         user_id: string,
         encuesta_id: string,
         pregunta_id: string,
@@ -35,17 +34,29 @@ export default function PreguntaView({ pregunta, isLast, isFirst, onSubmited, on
         text: ''
     })
 
+    const form = useForm<{
+        user_id: string,
+        encuesta_id: string,
+        pregunta_id: string,
+        respuesta_id: string | undefined,
+        text: string
+    }>(state)
+
     useEffect(() => {
-        form.setData('pregunta_id', pregunta.id)
-        form.setData('respuesta_id', undefined)
+        setState({...state, pregunta_id: pregunta.id, respuesta_id: undefined})
     }, [pregunta.id])
 
+    useEffect(() => {
+        form.setData(state)
+    },[state])
+
     const onChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-        form.setData('respuesta_id', e.currentTarget.value)
+        setState({...state, respuesta_id: e.currentTarget.value})
     }
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        console.log('asd');
         form.post(route('respuesta_user.store'), {
             onError() {
                 Swal.fire({
@@ -63,7 +74,7 @@ export default function PreguntaView({ pregunta, isLast, isFirst, onSubmited, on
 
     return (
         <form onSubmit={onSubmit}>
-            <p className="text-white mb-4">{pregunta.text}</p>
+            <p className="text-white text-xl mb-4">{pregunta.text}</p>
 
             {pregunta.respuestas?.map((respuesta, index, arr) => (
                 <RespuestaView key={respuesta.id} name="respuesta" onChecked={onChecked} respuesta={respuesta} />

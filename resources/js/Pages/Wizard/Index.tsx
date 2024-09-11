@@ -16,24 +16,25 @@ interface Props {
 }
 
 export default function Index({ encuesta }: Props) {
-    const [pregunta, setPregunta] = useState<Pregunta>(encuesta.preguntas[0]);
-    const [index, setIndex] = useState(0);
+    const [state, setState] = useState({index: 0, pregunta: encuesta.preguntas[0]})
     const [progresValue, setProgressValue] = useState(0);
-    const isLast = () => encuesta.preguntas.length == index + 1;
-    const isFirst = () => index == 0;
+    const isLast = () => encuesta.preguntas.length === state.index + 1;
+    const isFirst = () => state.index === 0;
 
-    const getProgressValue = () => {
-        return (index + 1) * 100 / encuesta.preguntas.length
+    const getProgressValue = (i: number) => {
+        return (i) * 100 / encuesta.preguntas.length
     }
 
     const nextQuestion = () => {
         if (!isLast()) {
-            setIndex((prevIndex) => {
-                setPregunta(() => {
-                    return encuesta.preguntas[index + 1]
-                })
-                return prevIndex + 1
+            setState((prevState) => {
+                let nextIndex = prevState.index + 1
+                let pregunta = encuesta.preguntas[nextIndex]
+                setProgressValue(getProgressValue(nextIndex))
+                return { index: nextIndex, pregunta: pregunta }
             })
+
+
         } else {
             Swal.fire({
                 title: "Encuesta finalizada",
@@ -58,16 +59,16 @@ export default function Index({ encuesta }: Props) {
             });
         }
 
-        setProgressValue(getProgressValue())
+
     }
 
     const backQuestion = () => {
-        !isFirst && setIndex((prevIndex) => {
-            setPregunta(encuesta.preguntas[prevIndex - 1])
-            return index - 1
+        !isFirst() && setState((prevState) => {
+            let nextIndex = prevState.index - 1
+            let pregunta = encuesta.preguntas[nextIndex];
+            setProgressValue(getProgressValue(nextIndex))
+            return { index: nextIndex, pregunta: pregunta }
         })
-
-        setProgressValue(getProgressValue())
     }
 
 
@@ -81,9 +82,9 @@ export default function Index({ encuesta }: Props) {
 
                     <ProgressBar value={progresValue}/>
 
-                    <span className="text-gray-200 text-sm font-bold uppercase block mb-4">Pregunta #{index + 1} / {encuesta.preguntas.length}</span>
+                    <span style={{fontSize: '0.63rem'}} className="text-gray-200 text-xs font-bold uppercase block mb-4">Pregunta #{state.index + 1} / {encuesta.preguntas.length}</span>
 
-                    <PreguntaView isFirst={isFirst()} isLast={isLast()} onBack={backQuestion} onSubmited={nextQuestion} pregunta={pregunta} />
+                    <PreguntaView isFirst={isFirst()} isLast={isLast()} onBack={backQuestion} onSubmited={nextQuestion} pregunta={state.pregunta} />
                 </div>
             </div>
         </AppLayout>

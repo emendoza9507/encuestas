@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateEncuestaRequest;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Models\Encuesta;
 use App\Models\Pregunta;
+use App\Models\RespuestaUser;
 use App\Models\TipoPregunta;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -90,6 +91,30 @@ class EncuestaController extends Controller
                 ]
             ]
         ));
+    }
+
+    public function stats(Request $request, Encuesta $encuesta) {
+        $encuesta->load('preguntas.respuestas.users');
+        return Inertia('Encuesta/Stats', [
+            'encuesta' => $encuesta,
+        ]);
+    }
+
+    public function clear(Request $request, Encuesta $encuesta) {
+        Gate::authorize('clear', [Encuesta::class, $encuesta]);
+        RespuestaUser::where('encuesta_id', $encuesta->id)->delete();
+
+        return redirect()->back();
+    }
+
+    public function showParticipantes(Request $request, Encuesta $encuesta) {
+        $encuesta->load(['participantes' => function(Builder $query) {
+            $query->distinct();
+        }]);
+
+        return Inertia::render('Encuesta/Participantes', [
+            'encuesta' => $encuesta
+        ]);
     }
 
     /**

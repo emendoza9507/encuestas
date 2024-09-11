@@ -63,7 +63,7 @@ export default function Login({ canResetPassword, status }: Props) {
 
                 <div className="group">
                     <a href="#">Olvide la clave</a>
-                    <a href="#">Registrar me</a>
+                    <a href={route("register")}>Registrar me</a>
                 </div>
             </form>
         </div>

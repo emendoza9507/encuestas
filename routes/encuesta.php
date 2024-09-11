@@ -27,4 +27,7 @@ Route::middleware([
     Route::resource('usuario', UserController::class);
 
     Route::get('responder/{encuesta}', [EncuestaController::class, 'wizard'])->name('encuesta.responder');
+    Route::get('stats/{encuesta}', [EncuestaController::class, 'stats'])->name('encuesta.stats');
+    Route::get('show/{encuesta}/participantes', [EncuestaController::class, 'showParticipantes'])->name('encuesta.participantes');
+    Route::delete('clear/{encuesta}', [EncuestaController::class, 'clear'])->name('encuesta.clear');
 });

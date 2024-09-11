@@ -56,6 +56,15 @@ class EncuestaPolicy
         return $user->can('encuesta.delete') && $user->id == $encuestum->created_by;
     }
 
+    public function clear(User $user, Encuesta $encuesta): bool
+    {
+        if($user->hasRole('Super-Admin')) {
+            return true;
+        }
+
+        return $user->can('encuesta.clear') && $user->id == $encuesta->created_by;
+    }
+
     /**
      * Determine whether the user can restore the model.
      */

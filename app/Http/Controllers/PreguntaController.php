@@ -65,9 +65,11 @@ class PreguntaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePreguntaRequest $request, Pregunta $Pregunta)
+    public function update(UpdatePreguntaRequest $request, Pregunta $preguntum)
     {
-        //
+        $preguntum->update($request->validated());
+
+        return redirect()->back();
     }
 
     /**

@@ -11,7 +11,7 @@ class UpdatePreguntaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdatePreguntaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'tipo_pregunta_id' => ['exists:tipo_preguntas,id'],
+            'text' => ['string']
         ];
     }
 }

@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import EncuestaContext from "../Encuesta/context/EncuestaContext";
 import Trash from "@/Components/icons/Trash";
 import EditIcon from "@/Components/icons/Edit";
+import route from "ziggy-js";
+import Swal from "sweetalert2";
 
 interface EditProps {
     pregunta: Pregunta
@@ -16,6 +18,25 @@ export default function Edit({ pregunta }: EditProps) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
+
+        put(route('pregunta.update', { preguntum: pregunta.id }), {
+            onError() {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Ha ocurrido un error inesperado, revise los datos.',
+                    icon: 'error'
+                })
+            },
+            onSuccess() {
+                Swal.fire({
+                    text: 'Datos guardados correctamente',
+                    icon: 'success',
+                })
+            },
+            onFinish() {
+                setEditPregunta(false)
+            }
+        })
     }
 
     return (

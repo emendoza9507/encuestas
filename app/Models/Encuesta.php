@@ -27,6 +27,6 @@ class Encuesta extends Model
 
     public function participantes(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'respuesta_user')->using(RespuestaUser::class);
+        return $this->belongsToMany(User::class, 'respuesta_user')->using(RespuestaUser::class)->withPivot(['encuesta_id', 'user_id']);
     }
 }
