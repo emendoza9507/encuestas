@@ -34,6 +34,13 @@ class EncuestaController extends Controller
         ));
     }
 
+    public function wizard(Request $request, Encuesta $encuesta) {
+        $encuesta->load('preguntas.respuestas');
+        return Inertia::render('Wizard/Index', [
+            'encuesta' => $encuesta
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -127,4 +134,5 @@ class EncuestaController extends Controller
 
         return redirect()->back()->with('message', 'Encuesta eliminada');
     }
+
 }

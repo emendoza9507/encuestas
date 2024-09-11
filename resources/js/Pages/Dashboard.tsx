@@ -12,6 +12,7 @@ import { Auth, User } from '@/types';
 import route from 'ziggy-js';
 import Pagination, { PaginationProps } from '@/Components/Pagination';
 import { Router, router } from '@inertiajs/core';
+import SendSolid from '@/Components/icons/SendSolid';
 
 interface Props {
     auth: Auth
@@ -27,28 +28,28 @@ interface ItemProps {
 function EncuestaView({ encuesta, auth, delay }: ItemProps) {
     const [opacity, setOpacity] = useState(0);
     useEffect(() => {
-        delay && setTimeout(() => {
-            setOpacity(1)
-        }, delay * 1000)
+
     }, [])
 
     return (
-        <article style={{animationDelay: delay + 's', opacity: opacity}} className='encuesta-item flex flex-col justify-between  animate-fadeInUp bg-gray-500 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
+        <article className='encuesta-item flex flex-col justify-between   bg-gray-500 text-white shadow-xl hover:shadow-red-500 hover:scale-105 transition'>
             <header className='p-3 font-bold'>
                 <Link href={route('encuesta.show', {encuestum: encuesta.id})}>{encuesta.title}</Link>
             </header>
-            <div className='p-3 text-gray-300'>
+            {/* <div className='p-3 text-gray-300'>
                 <div>
                     <span className='text-white'><b className='bg-cyan-800 px-1 py-0.5'>Autor:</b> <i>{encuesta.creador?.name}</i></span>
                 </div>
-                {encuesta.description}
-            </div>
+            </div> */}
             <footer className={`flex justify-between p-3 ${encuesta.active ? 'active' : ''}`}>
                 <div className='flex flex-row gap-3'>
                     <span className='flex items-center text-green-300'><Ligth title='Activa' /></span>
                     <span className='flex items-center'><Question title='Preguntas' />: <i>{encuesta.preguntas?.length}</i></span>
                     <span className='flex items-center'><Users title='Participantes' />: {encuesta.participantes?.length}</span>
                 </div>
+                <button onClick={() => router.visit(route('encuesta.responder', {encuesta: encuesta.id}))} className='flex gap-1 border-2 p-1 hover:scale-110 transition-all hover:border-red-500 group'>
+                    <SendSolid className='group-hover:animate-bounce group-hover:text-red-400 '/> Responder
+                </button>
             </footer>
         </article>
     )

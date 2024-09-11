@@ -25,4 +25,6 @@ Route::middleware([
     Route::resource('respuesta', RespuestaController::class);
     Route::resource('respuesta_user', RespuestaUserController::class)->only(['store', 'show']);
     Route::resource('usuario', UserController::class);
+
+    Route::get('responder/{encuesta}', [EncuestaController::class, 'wizard'])->name('encuesta.responder');
 });

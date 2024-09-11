@@ -1,6 +1,8 @@
 <?php
 
+use App\Actions\Encuesta\CreateNewRespuestaUser;
 use App\Http\Controllers\Api\ApiPreguntaController;
+use App\Http\Controllers\Api\ApiRespuestaUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,4 +16,5 @@ Route::middleware([
         return $request->user();
     });
     Route::name('api')->apiResource('pregunta', ApiPreguntaController::class)->only(['show', 'index']);
+    Route::post('/respuesta_user', [ApiRespuestaUserController::class, 'store'])->name('api.create_respuesta_usuario');
 });

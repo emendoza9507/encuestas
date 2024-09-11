@@ -32,7 +32,7 @@ Route::middleware([
         ->where('title', 'like', '%'.$query.'%')
         ->where('active', true)
         ->orderBy('id', 'desc')
-        ->paginate(6);
+        ->paginate(12);
 
         return Inertia::render('Dashboard', [
             'encuestas' => $encuestas

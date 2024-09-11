@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePreguntaRequest;
 use App\Http\Requests\UpdatePreguntaRequest;
 use App\Models\Pregunta;
-use App\Models\Respuesta;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class ApiPreguntaController extends Controller
 {

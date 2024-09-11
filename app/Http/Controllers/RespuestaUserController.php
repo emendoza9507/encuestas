@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Encuesta\CreateNewRespuestaUser;
 use App\Http\Requests\StoreRespuestaRequest;
 use App\Http\Requests\StoreRespuestaUserRequest;
 use App\Http\Requests\UpdateRespuestaRequest;
@@ -30,18 +31,9 @@ class RespuestaUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRespuestaUserRequest $request)
+    public function store(StoreRespuestaUserRequest $request, CreateNewRespuestaUser $action)
     {
-        $pregunta_id = $request->get('pregunta_id');
-        $respuestaAnterior = RespuestaUser::where('pregunta_id',$pregunta_id)
-            ->where('user_id', $request->user_id)->first();
-
-
-        if($respuestaAnterior) {
-            $respuestaAnterior->update($request->validated());
-        } else {
-            RespuestaUser::create($request->validated());
-        }
+        $action->handle($request);
 
 
         return redirect()->back();
