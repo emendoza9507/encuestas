@@ -1,5 +1,4 @@
-import { Role } from "@/types"
-import { Permission } from "./Role"
+import Role, { Permission } from "./Role"
 
 export default interface User {
     id: string,

@@ -6,6 +6,9 @@ import RespuestaUser from "@/Models/RespuestaUser";
 import { PaginationProps } from "@/Components/Pagination";
 import { Link } from "@inertiajs/react";
 import User from "@/Models/User";
+import route from "ziggy-js";
+import Users from "@/Components/icons/Users";
+import Cog from "@/Components/icons/Cog";
 
 interface Props {
     encuestas: PaginationProps<Encuesta>
@@ -44,8 +47,8 @@ export default function Inde({ encuestas, users, participaciones }: Props) {
                             <thead>
                                 <tr>
                                     <td className="uppercase px-2 border font-bold text-white">Titulo</td>
-                                    <td className="uppercase px-2 border font-bold text-white">Preguntas</td>
-                                    <td className="uppercase px-2 border font-bold text-white">Participantes</td>
+                                    <td className="uppercase px-2 border font-bold text-white text-center">Preguntas</td>
+                                    <td className="uppercase px-2 border font-bold text-white text-center">INTERACIONES</td>
                                 </tr>
                             </thead>
                             <tbody className="text-op">
@@ -72,7 +75,9 @@ export default function Inde({ encuestas, users, participaciones }: Props) {
                     </div>
 
                     <div className="">
-                        <h3 className="text-white font-bold uppercase  border inline m-0 py-1 px-2">Usuarios</h3>
+                        <h3 className="text-white font-bold uppercase  border inline-block m-0 py-1 px-2">
+                            <Link href={route('usuario.index')} className="flex gap-1">Usuarios <Cog/></Link>
+                        </h3>
 
                         <table className="w-full border-collapse px-2">
                             <thead>
@@ -85,7 +90,11 @@ export default function Inde({ encuestas, users, participaciones }: Props) {
                             <tbody className="text-op">
                                 {users.data.map(user => (
                                     <tr key={user.id}>
-                                        <td className="text-left px-2 border text-white opacity-75">{user.name}</td>
+                                        <td className="text-left px-2 border text-white opacity-75">
+                                            <Link href={route('usuario.edit', { usuario: user.id })}>
+                                                {user.name}
+                                            </Link>
+                                        </td>
                                         <td className="text-left px-2 border text-white opacity-75">{user.email}</td>
                                         <td className="text-left px-2 border text-white opacity-75">{user.roles?.map(r => r.name).join(',')}</td>
                                     </tr>
