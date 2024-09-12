@@ -28,6 +28,7 @@ export interface Auth {
     User & {
       all_teams?: Team[];
       current_team?: Team;
+      roles?: Role[]
     }
   >;
   permissions: {[key: string]: any}

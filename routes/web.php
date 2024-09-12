@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Encuesta;
+use App\Models\RespuestaUser;
+use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -38,6 +40,21 @@ Route::middleware([
             'encuestas' => $encuestas
         ]);
     })->name('dashboard');
+
+    Route::get('/control-panel', function () {
+        $encuestas = Encuesta::with(['participantes' => function(Builder $query) {
+            $query->distinct();
+        },'preguntas' => ['participantes'], 'creador'])
+        ->orderBy('id', 'desc')
+        ->paginate(5);
+
+        $users = User::with(['roles.permissions', 'permissions'],)->paginate(5, ['*'], 'pageUsers');
+        $participaciones = RespuestaUser::query()->select('encuesta_id', 'user_id')->distinct()->get();
+
+        return Inertia::render('PanelControl/Index', compact(
+            'encuestas', 'users', 'participaciones'
+        ));
+    })->name('control-panel');
 });
 
 

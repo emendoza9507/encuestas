@@ -216,6 +216,12 @@ export default function AppLayout({
                                             Gestion de Encuestas
                                         </div>
 
+                                        {page.props.auth.user?.roles?.some((r) => ['Super-Admin', 'admin'].includes(r.name)) && (
+                                            <DropdownLink href={route('control-panel')}>
+                                                Panel Control
+                                            </DropdownLink>
+                                        )}
+
                                         {page.props.auth.permissions.encuesta.create && (<DropdownLink href={route('encuesta.index')}>
                                             Mis encuestas
                                         </DropdownLink>)}

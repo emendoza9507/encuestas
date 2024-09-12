@@ -30,6 +30,14 @@ export default {
                     },
                 },
             },
+            width: {
+                98: '400px'
+            },
+            colors: {
+                blue: {
+                    950: "rgb(0 0 117)"
+                }
+            },
             animation: {
                 fadeInUp: 'fade-in-up 1s ease-in-out 0.25s 1'
             }

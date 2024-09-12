@@ -73,6 +73,8 @@ export default function Dashboard({ encuestas, auth, ...props }: PropsWithChildr
         setFilerEncuestas({...encuestas, data: encuestas.data.filter(encuesta => encuesta.title.toLowerCase().includes(form.data.query.toLowerCase()))})
     }
 
+    console.log(auth)
+
     return (
         <AppLayout
             title="Dashboard"
